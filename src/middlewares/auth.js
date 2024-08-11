@@ -22,8 +22,8 @@ function auth() {
 
       next();
     } catch (error) {
-      response.status(error.status || 500);
-      response.json({
+      res.status(error.status || 500);
+      res.json({
         success: false,
         message: error.message,
       });
