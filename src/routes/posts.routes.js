@@ -2,6 +2,7 @@ const express = require("express");
 const createError = require("http-errors");
 
 const postsUseCases = require("../usecases/posts.usecase");
+const auth = require("../middlewares/auth");
 
 const router = express.Router();
 
@@ -27,7 +28,7 @@ Requiere autorización
 */
 
 // POST /posts
-router.post("/posts", async (req, res) => {
+router.post("/posts", auth, async (req, res) => {
   try {
     const data = req.body;
     const post = await postsUseCases.create(data);
@@ -96,7 +97,7 @@ router.get("/posts/:id", async (req, res) => {
 });
 
 // PATCH /posts/:id
-router.patch("/posts/:id", async (req, res) => {
+router.patch("/posts/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
     const newData = req.body;
@@ -119,7 +120,7 @@ router.patch("/posts/:id", async (req, res) => {
 });
 
 // DELETE /posts/:id
-router.delete("/posts/:id", async (req, res) => {
+router.delete("/posts/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
     const post = await postsUseCases.remove(id);

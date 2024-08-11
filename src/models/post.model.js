@@ -5,6 +5,7 @@ Atributos necesarios para la conexión a la base de datos
 - title (string)
 - image (string)
 - body (string )
+- tags (array)
 - user (ObjectId referencia a UserId)
 - created_at (date)
 - updated_at (date)
@@ -24,6 +25,11 @@ const postSchema = new mongoose.Schema({
   body: {
     type: String,
     required: true,
+  },
+  tags: {
+    type: [String],
+    required: false,
+    maxlength: 5,
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
