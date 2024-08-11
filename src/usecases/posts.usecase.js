@@ -21,9 +21,9 @@ async function create(data) {
 }
 
 // Funcion para obtener todos los posts
-async function getAll() {
-  const posts = await Post.find({});
-  return posts;
+async function getAll({ search }) {
+  const query = search ? { title: { $regex: search, $options: "i" } } : {};
+  return await Post.find(query);
 }
 
 // Funcion para obtener un post por su id

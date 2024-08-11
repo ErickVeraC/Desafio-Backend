@@ -4,6 +4,7 @@ const helmet = require("helmet");
 
 const usersRoutes = require("./routes/users.routes");
 const postsRoutes = require("./routes/posts.routes");
+const authRoutes = require("./routes/auth.routes");
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use("/user", usersRoutes);
 app.use("/post", postsRoutes);
+app.use("/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.json({

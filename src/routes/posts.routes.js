@@ -28,7 +28,7 @@ Requiere autorización
 */
 
 // POST /posts
-router.post("/posts", auth, async (req, res) => {
+router.post("/", auth, async (req, res) => {
   try {
     const data = req.body;
     const post = await postsUseCases.create(data);
@@ -50,9 +50,10 @@ router.post("/posts", auth, async (req, res) => {
 });
 
 // GET /posts
-router.get("/posts", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const posts = await postsUseCases.getAll();
+    const search = req.query.search || "";
+    const posts = await postsUseCases.getAll({ search });
 
     res.json({
       success: true,
@@ -71,7 +72,7 @@ router.get("/posts", async (req, res) => {
 });
 
 // GET /posts/:id
-router.get("/posts/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const post = await postsUseCases.getById(id);
@@ -97,7 +98,7 @@ router.get("/posts/:id", async (req, res) => {
 });
 
 // PATCH /posts/:id
-router.patch("/posts/:id", auth, async (req, res) => {
+router.patch("/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
     const newData = req.body;
@@ -120,7 +121,7 @@ router.patch("/posts/:id", auth, async (req, res) => {
 });
 
 // DELETE /posts/:id
-router.delete("/posts/:id", auth, async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
     const post = await postsUseCases.remove(id);
