@@ -2,7 +2,7 @@ const User = require("../models/user.model");
 
 const createError = require("http-errors");
 
-const encryp = require("../lib/encryp");
+const encryp = require("../lib/encrypt");
 
 const jwt = require("../lib/jwt");
 

@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     match: RegExp(".*@.*..*"),
+    unique: true,
   },
   password: {
     type: String,

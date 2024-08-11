@@ -11,8 +11,8 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-app.use("/users", usersRoutes); // Asegúrate de que esta línea esté correcta
-app.use("/posts", postsRoutes);
+app.use("/user", usersRoutes);
+app.use("/post", postsRoutes);
 
 app.get("/", (req, res) => {
   res.json({

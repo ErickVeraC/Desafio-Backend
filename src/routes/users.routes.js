@@ -20,7 +20,7 @@ No requiere autorización
 */
 
 // POST /user
-router.post("/user", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const data = req.body;
     const user = await usersUseCases.signup(data);
@@ -42,7 +42,7 @@ router.post("/user", async (req, res) => {
 });
 
 // GET /user/:id
-router.get("/user/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const user = await usersUseCases.getById(id);

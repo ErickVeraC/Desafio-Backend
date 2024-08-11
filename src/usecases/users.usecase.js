@@ -2,7 +2,7 @@ const User = require("../models/user.model");
 
 const createError = require("http-errors");
 
-const encryp = require("../lib/encryp");
+const encryption = require("../lib/encrypt");
 
 const jwt = require("../lib/jwt");
 
@@ -22,7 +22,7 @@ async function signup(data) {
     throw createError(400, "Password must be at least 8 characters long");
   }
 
-  const password = await encryp(data.password);
+  const password = await encryption.encrypt(data.password);
 
   data.password = password;
 
@@ -39,7 +39,7 @@ async function login(data) {
     throw createError(401, "Invalid credentials");
   }
 
-  const isValidPassword = await encryp.compare(data.password, user.password);
+  const isValidPassword = encryption.compare(data.password, user.password);
 
   if (!isValidPassword) {
     throw createError(401, "Invalid credentials");
