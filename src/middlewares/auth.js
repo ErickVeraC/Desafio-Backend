@@ -1,6 +1,6 @@
 const createError = require("http-errors");
 
-const postUseCases = require("../usecases/posts.usecase");
+const userUseCases = require("../usecases/users.usecase");
 
 const jwt = require("jsonwebtoken");
 
@@ -17,8 +17,13 @@ function auth() {
 
       const payload = jwt.verify(token);
 
-      const post = await postUseCases.getById(payload.id);
-      req.post = post;
+      const user = await userUseCases.getById(payload.id);
+
+      if (!user) {
+        throw createError(401, "Unauthorized");
+      }
+
+      req.user = user;
 
       next();
     } catch (error) {

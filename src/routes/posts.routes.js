@@ -31,6 +31,7 @@ Requiere autorización
 router.post("/", auth, async (req, res) => {
   try {
     const data = req.body;
+    data.user = req.user._id; // Asigna el post al usuario autenticado
     const post = await postsUseCases.create(data);
 
     res.json({
@@ -102,6 +103,7 @@ router.patch("/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
     const newData = req.body;
+    delete newData.user; // No permitir cambiar el usuario del post
     const post = await postsUseCases.update(id, newData);
 
     res.json({
@@ -124,7 +126,7 @@ router.patch("/:id", auth, async (req, res) => {
 router.delete("/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
-    const post = await postsUseCases.remove(id);
+    const post = await postsUseCases.remove(id, req.user._id); // Verifica que el usuario sea el dueño del post
 
     res.json({
       success: true,

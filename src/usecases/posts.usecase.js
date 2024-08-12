@@ -1,18 +1,5 @@
-const User = require("../models/user.model");
-
+const Post = require("../models/post.model");
 const createError = require("http-errors");
-
-const encryp = require("../lib/encrypt");
-
-const jwt = require("../lib/jwt");
-
-/*
-Funcion para crear un post
-Funcion para obtener todos los posts
-Funcion para obtener un post por su id
-Funcion para actualizar un post
-Funcion para eliminar un post
-*/
 
 // Funcion para crear un post
 async function create(data) {
@@ -22,42 +9,43 @@ async function create(data) {
 
 // Funcion para obtener todos los posts
 async function getAll({ search }) {
-  const query = search ? { title: { $regex: search, $options: "i" } } : {};
-  return await Post.find(query);
-}
-
-// Funcion para obtener un post por su id
-async function getById(id) {
-  const post = await Post.findById(id);
-  return post;
+  const query = search ? { title: new RegExp(search, "i") } : {};
+  const posts = await Post.find(query);
+  return posts;
 }
 
 // Funcion para actualizar un post
 async function update(id, newData) {
-  const postFound = await Post.findByIdAndUpdate(id);
+  const postFound = await Post.findById(id);
 
   if (!postFound) {
     throw createError(404, "Post not found");
   }
-  const post = await Post.findByIdAndUpdate(id, newData, { new: true });
+
+  Object.assign(postFound, newData);
+  await postFound.save();
+  return postFound;
 }
 
 // Funcion para eliminar un post
-async function remove(id) {
-  const postFound = await Post.findByIdAndDelete(id);
+async function remove(id, userId) {
+  const postFound = await Post.findById(id);
 
   if (!postFound) {
     throw createError(404, "Post not found");
   }
 
-  const deletedPost = await Post.findByIdAndDelete(id);
-  return deletedPost;
+  if (postFound.user.toString() !== userId.toString()) {
+    throw createError(403, "Not authorized to delete this post");
+  }
+
+  await postFound.remove();
+  return postFound;
 }
 
 module.exports = {
   create,
   getAll,
-  getById,
   update,
   remove,
 };
