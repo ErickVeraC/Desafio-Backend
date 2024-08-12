@@ -1,0 +1,107 @@
+div.card-body.conteiner {
+  width: 45rem;
+}
+
+div.card {
+  border: none;
+}
+
+div.container {
+  width: 40rem;
+}
+
+.dev-img {
+  margin-left: 17rem;
+  width: 55px;
+}
+
+a {
+  text-decoration: none;
+}
+
+h1 {
+  font: bold;
+  font-size: 30px;
+  margin-left: 7.5rem;
+  margin-top: 1.5rem;
+}
+
+p.card-text {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  margin-left: 4rem;
+}
+
+.list-social-button {
+  list-style: none;
+}
+
+.social-media-button {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: white;
+  border: 1px solid;
+  border-color: #aaa;
+  border-radius: 5px;
+  height: 3rem;
+  width: 80%;
+}
+.social-media-button:hover {
+  background-color: #e0e0e0;
+  border-color: #aaa;
+}
+
+.social-media-button-name {
+  margin-left: 33%;
+}
+
+.separation-block {
+  margin-bottom: 2rem;
+  margin-left: 2rem;
+  margin-top: 2rem;
+  width: 33rem;
+}
+
+.login-email {
+  width: 33rem;
+  margin-left: 2rem;
+}
+
+.d-flex.forgot-password {
+  justify-content: space-between;
+}
+
+.btn.btn-primary {
+  height: 2.5rem;
+  margin-left: 2rem;
+  width: 33rem;
+}
+
+.crate-account {
+  font-size: 14px;
+  margin-top: 1.75rem;
+  width: 33rem;
+}
+
+p.crate-account-text {
+  font-style: italic;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  margin-left: 3rem;
+  text-align: center;
+}
+
+.last-p p {
+  text-align: center;
+}
+
+.new-to-dev-community {
+  width: 33rem;
+}
+
+.new-to-dev-community p {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  margin-left: 2rem;
+  text-align: center;
+}/*# sourceMappingURL=styleslog.css.map */

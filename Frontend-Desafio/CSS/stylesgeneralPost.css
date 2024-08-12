@@ -1,0 +1,96 @@
+@charset "UTF-8";
+main {
+  background-color: #f5f5f5;
+}
+
+.aside .button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+  margin-top: 3rem;
+}
+.aside .button-container button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-top: 1rem;
+}
+.aside .button-container button span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.aside .button-container button svg {
+  margin-bottom: 0.5rem;
+}
+
+#printPost {
+  background-color: #f5f5f5;
+  border: none;
+}
+
+input.position-relative.w-100.border-0 {
+  border: none;
+  box-shadow: none;
+  outline: none;
+}
+
+.right-aside.col-2.mt-2 {
+  margin-left: 0.75rem;
+  width: 20rem;
+}
+
+.div_card-img-top-right-aside {
+  background-color: peru;
+}
+
+.card-img-top-right-aside {
+  border-radius: 100%;
+  margin-left: 15px;
+  width: 50px;
+}
+
+.card-body p {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.link-second-card {
+  text-decoration: none;
+}
+
+.footer {
+  background-color: #e5e5e5;
+  font-size: 0.875rem;
+  padding: 3rem;
+}
+.footer__legals {
+  color: #404040;
+  margin: 0;
+}
+.footer__link {
+  color: #3b49df;
+  text-decoration: none;
+}
+.footer__link:hover {
+  text-decoration: underline;
+}
+.footer__nav-links {
+  margin: 0;
+}
+.footer__nav-link {
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+.footer__nav-link:not(:last-child)::after {
+  content: "•";
+  font-size: 1.5rem;
+  padding: 0 0.5rem;
+}/*# sourceMappingURL=stylesgeneralPost.css.map */
