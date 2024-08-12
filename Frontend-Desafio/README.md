@@ -1,2 +1,0 @@
-# JS
-Equipo 1
