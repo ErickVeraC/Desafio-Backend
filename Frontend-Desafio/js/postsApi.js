@@ -1,4 +1,4 @@
-const BASE_URL = "https://js23-kodemia-default-rtdb.firebaseio.com/posts";
+const BASE_URL = "https://desafio-backend-jnku.onrender.com/users";
 
 const createPost = async (postObject) => {
   postObject.timestamp = new Date().toISOString();
