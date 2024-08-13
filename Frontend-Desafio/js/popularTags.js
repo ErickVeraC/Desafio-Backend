@@ -1,10 +1,4 @@
-import {
-  getAllPosts,
-  updateLikes,
-  addCommentToPost,
-  getPostById,
-  addLikeToPost,
-} from "./postsApi.js";
+import { getAllPosts, getPostById } from "./postsApi.js";
 
 // Función para contar la frecuencia de los tags
 const countTagsFrequency = (posts) => {
