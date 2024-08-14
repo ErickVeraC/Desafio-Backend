@@ -1,5 +1,13 @@
+// Este archivo se encarga de renderizar los posts en el contenedor de la página
+
 // Importar funciones necesarias de otros archivos
-import { getAllPosts, getPostById } from "./postsApi.js";
+import {
+  getAllPosts,
+  updateLikes,
+  addCommentToPost,
+  getPostById,
+  addLikeToPost,
+} from "./postsApi.js";
 
 // Función para mostrar las etiquetas en el contenedor
 const renderTags = (tags, tagsContainer) => {
@@ -25,7 +33,7 @@ const createCard = (post, isFirst) => {
   cardBody.style.height = "auto";
 
   const cardImg = document.createElement("img");
-  cardImg.src = post.image; // Usamos post.image del backend
+  cardImg.src = post.picSource;
   cardImg.className = "card-img-top img-fluid";
   cardImg.alt = post.title;
   cardImg.classList.add("card-box");
@@ -45,7 +53,7 @@ const createCard = (post, isFirst) => {
   author.textContent = post.user;
   const date = document.createElement("small");
   date.className = "text-muted d-block";
-  date.textContent = new Date(post.created_at).toLocaleDateString("en-US", {
+  date.textContent = new Date(post.timestamp).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
   });
@@ -68,44 +76,111 @@ const createCard = (post, isFirst) => {
 
   const tagsContainer = document.createElement("div");
   tagsContainer.className = "mb-2";
-  renderTags(post.tags, tagsContainer); // Asumiendo que `post.tags` es un array de strings
+  renderTags(post.tags, tagsContainer);
 
   const cardText = document.createElement("p");
   cardText.className = "card-text";
-  cardText.textContent = post.body.split(" ").slice(0, 12).join(" ") + "..."; // Usamos post.body para el texto de la card
+  cardText.textContent =
+    post.abstract.split(" ").slice(0, 12).join(" ") + "...";
   cardText.style.textDecoration = "none";
+
+  const likeButton = document.createElement("button");
+  likeButton.className = "btn me-2";
+  likeButton.innerHTML = "&#x1F44D;";
+  likeButton.addEventListener("click", async () => {
+    try {
+      await addLikeToPost(post.id);
+      post.likes++;
+      likeCount.textContent = `${post.likes} Likes`;
+    } catch (error) {
+      console.error("Error al agregar like:", error);
+    }
+  });
+
+  const likeCount = document.createElement("span");
+  likeCount.className = "align-self-center";
+  likeCount.textContent = `${post.likes} Likes`;
+
+  const commentButton = document.createElement("button");
+  commentButton.className = "btn btn-outline-secondary border-0";
+  commentButton.textContent = "Comentar";
+  commentButton.addEventListener("click", () => {
+    const commentInput = document.createElement("input");
+    commentInput.type = "text";
+    commentInput.className = "form-control mt-2";
+    commentInput.placeholder = "Escribe tu comentario...";
+    commentInput.addEventListener("keydown", async (event) => {
+      if (event.key === "Enter" && commentInput.value.trim() !== "") {
+        const comment = {
+          user: "Usuario",
+          text: commentInput.value.trim(),
+          timestamp: new Date().toISOString(),
+        };
+        try {
+          await addCommentToPost(post.id, comment);
+          renderComments(post, commentsContainer);
+          commentInput.remove();
+        } catch (error) {
+          console.error("Error al agregar comentario:", error);
+        }
+      }
+    });
+    cardBody.appendChild(commentInput);
+  });
+
+  const interactionContainer = document.createElement("div");
+  interactionContainer.className = "d-flex justify-content-around mb-2";
+  interactionContainer.appendChild(likeButton);
+  interactionContainer.appendChild(likeCount);
+  interactionContainer.appendChild(commentButton);
+
+  const commentsContainer = document.createElement("div");
+  commentsContainer.className = "mt-2";
+
+  const renderComments = (post, container) => {
+    container.innerHTML = "";
+    post.comments.forEach((comment) => {
+      const commentElement = document.createElement("div");
+      commentElement.className = "mb-2";
+
+      const commentText = document.createElement("p");
+      commentText.textContent = `${comment.user}: ${comment.text}`;
+      commentElement.appendChild(commentText);
+
+      const commentDate = document.createElement("small");
+      commentDate.className = "text-muted";
+      commentDate.textContent = new Date(comment.timestamp).toLocaleDateString(
+        "en-US",
+        {
+          month: "short",
+          day: "numeric",
+        }
+      );
+      commentElement.appendChild(commentDate);
+
+      container.appendChild(commentElement);
+    });
+  };
+
+  renderComments(post, commentsContainer);
 
   cardBody.appendChild(authorAndDate);
   cardBody.appendChild(cardTitle);
   cardBody.appendChild(tagsContainer);
+  cardBody.appendChild(interactionContainer);
   cardBody.appendChild(cardText);
+  cardBody.appendChild(commentsContainer);
   cardLink.appendChild(cardBody);
 
   return cardLink;
 };
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const response = await getAllPosts();
-
-  const posts = response.data.posts;
-
-  if (!Array.isArray(posts)) {
-    console.error("Expected an array but got:", posts);
-    return;
-  }
-
-  const cardContainer = document.getElementById("card-container");
-
-  posts.forEach((post, index) => {
-    const card = createCard(post, index === 0); // Pasamos `index === 0` como `isFirst`
-    cardContainer.appendChild(card);
-  });
-});
-
 // Función para renderizar los posts en el contenedor
 const renderPosts = (posts, postsContainer) => {
   postsContainer.innerHTML = "";
   posts.forEach((post, index) => {
+    post.likes = post.likes || 0;
+    post.comments = post.comments || [];
     const card = createCard(post, index === 0);
     postsContainer.appendChild(card);
   });
@@ -123,7 +198,7 @@ const filterPosts = (posts, searchTerm) => {
   // Incluir también los posts que tienen coincidencias en el contenido
   const contentMatches = posts.filter(
     (post) =>
-      post.body.toLowerCase().includes(lowerCaseSearchTerm) &&
+      post.abstract.toLowerCase().includes(lowerCaseSearchTerm) &&
       !post.title.toLowerCase().includes(lowerCaseSearchTerm)
   );
 
@@ -158,11 +233,30 @@ document.addEventListener("DOMContentLoaded", () => {
   validateSession();
 });
 
+// Función para ordenar los posts
+const sortPosts = {
+  relevant: (posts) => {
+    return posts.sort((a, b) => {
+      if (a.comments && b.comments) {
+        return b.comments.length - a.comments.length;
+      }
+      return 0;
+    });
+  },
+  latest: (posts) => {
+    return posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  },
+  top: (posts) => {
+    return posts.sort((a, b) => b.likes - a.likes);
+  },
+};
+
 // Función para manejar el ordenamiento de posts
 const handleSort = async (sortType, postsContainer) => {
   try {
     const posts = await getAllPosts();
-    renderPosts(posts, postsContainer); // Ordenamiento manual removido
+    const sortedPosts = sortPosts[sortType](posts);
+    renderPosts(sortedPosts, postsContainer);
   } catch (error) {
     console.error("Error al ordenar y renderizar los posts:", error);
   }
