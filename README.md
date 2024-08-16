@@ -5,7 +5,7 @@ Este proyecto incluye un servidor backend y un frontend para gestionar y mostrar
 ### Despliegues
 
 - Servidor Backend: https://desafio-backend-jnku.onrender.com
-- Frontend: https://frontend-con-servidor-nodejs-i74n1zlfq-js-kodemia-projects.vercel.app
+- Frontend: https://frontend-con-servidor-nodejs.vercel.app/
 
 ### Funcionalidades
 
