@@ -47,7 +47,7 @@ async function login(data) {
 
   const token = jwt.sign({ id: user._id });
 
-  return token;
+  return { token, userId: user._id };
 }
 
 // funcion para obtener un usuario por su id
