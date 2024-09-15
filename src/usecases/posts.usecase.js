@@ -43,9 +43,16 @@ async function remove(id, userId) {
   return postFound;
 }
 
+// Funcion para obtener un post por id
+async function getById(id) {
+  const post = await Post.findById(id);
+  return post;
+}
+
 module.exports = {
   create,
   getAll,
   update,
   remove,
+  getById,
 };
